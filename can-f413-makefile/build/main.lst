@@ -1,0 +1,109 @@
+ARM GAS  /tmp/cc3kJKaw.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Src/main.c"
+  20              		.section	.text.main,"ax",%progbits
+  21              		.align	1
+  22              		.global	main
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	main:
+  28              	.LFB134:
+   1:Src/main.c    **** #include "main.h"
+   2:Src/main.c    **** 
+   3:Src/main.c    **** 
+   4:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+   5:Src/main.c    **** 
+   6:Src/main.c    **** int main(void)
+   7:Src/main.c    **** {
+  29              		.loc 1 7 1 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34 0000 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+   8:Src/main.c    ****   init();
+  39              		.loc 1 8 3 view .LVU1
+  40 0002 FFF7FEFF 		bl	init
+  41              	.LVL0:
+  42              	.L2:
+   9:Src/main.c    ****   while (1)
+  43              		.loc 1 9 3 view .LVU2
+  10:Src/main.c    ****   {
+  11:Src/main.c    ****     /* USER CODE END WHILE */
+  12:Src/main.c    ****     HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9); // Headlight
+  44              		.loc 1 12 5 view .LVU3
+  45 0006 4FF40071 		mov	r1, #512
+  46 000a 0648     		ldr	r0, .L4
+ARM GAS  /tmp/cc3kJKaw.s 			page 2
+
+
+  47 000c FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  48              	.LVL1:
+  13:Src/main.c    ****     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // internal led
+  49              		.loc 1 13 5 view .LVU4
+  50 0010 0121     		movs	r1, #1
+  51 0012 0548     		ldr	r0, .L4+4
+  52 0014 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  53              	.LVL2:
+  14:Src/main.c    ****     //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_9); // Motors 1
+  15:Src/main.c    ****     //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_11); // Motors 2
+  16:Src/main.c    ****     HAL_Delay(1000);
+  54              		.loc 1 16 5 discriminator 2 view .LVU5
+  55 0018 4FF47A70 		mov	r0, #1000
+  56 001c FFF7FEFF 		bl	HAL_Delay
+  57              	.LVL3:
+   9:Src/main.c    ****   {
+  58              		.loc 1 9 9 view .LVU6
+  59 0020 F1E7     		b	.L2
+  60              	.L5:
+  61 0022 00BF     		.align	2
+  62              	.L4:
+  63 0024 00140240 		.word	1073878016
+  64 0028 00040240 		.word	1073873920
+  65              		.cfi_endproc
+  66              	.LFE134:
+  68              		.text
+  69              	.Letext0:
+  70              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+  71              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+  72              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h"
+  73              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+  74              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+  75              		.file 7 "Inc/init.h"
+ARM GAS  /tmp/cc3kJKaw.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/cc3kJKaw.s:21     .text.main:00000000 $t
+     /tmp/cc3kJKaw.s:27     .text.main:00000000 main
+     /tmp/cc3kJKaw.s:63     .text.main:00000024 $d
+
+UNDEFINED SYMBOLS
+init
+HAL_GPIO_TogglePin
+HAL_Delay
