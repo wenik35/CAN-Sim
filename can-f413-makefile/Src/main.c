@@ -101,9 +101,10 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_TIM2_Init();
-  /* USER CODE BEGIN 2 */
+/* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-
+  
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET); //SLEEP must be high
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,16 +112,20 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); //internal led
+    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9); // Headlight
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // internal led    
+    //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_9); // Motors 1
+    //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_11); // Motors 2
     HAL_Delay(1000);
 
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1000);
-    HAL_Delay(1000);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
-    HAL_Delay(1000);
+    // Servo
+    //__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 800);
+    //HAL_Delay(1000);
+    //__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
+    //HAL_Delay(1000);
 
     /* USER CODE BEGIN 3 */
+  }
   }
   /* USER CODE END 3 */
 }
