@@ -105,38 +105,45 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
 /* USER CODE BEGIN 2 */
+  // Start Timers
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
   
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET); //SLEEP PIN HIGH
-  /* USER CODE END 2 */
+  // Sleep Pin needs to be pulled high for the DRV8833 to do anything
+  // Pin configured as Standard High
+  // HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // internal led
+
+    // Internal LED (Successful flash indicator)
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
     HAL_Delay(1000);
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); // internal led
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
     HAL_Delay(1000);
     
     // SHOWCASE LOOP
-    if (0) {      
-        HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9); // Headlight
+    if (0) {
+        // Headlights
+        HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
         HAL_Delay(1000);
-        HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9); // Headlight
+        HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
         HAL_Delay(1000);
         
+        // Servo - Bonnet
         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
         HAL_Delay(1000);
         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 800);
         HAL_Delay(1000);
         
-        
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 20);
+        // Motors - Wheels
+        // Works only upwards of ~70
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 70);
         HAL_Delay(1000);
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 60);
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 100);
         HAL_Delay(1000);
         __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
         HAL_Delay(1000);
