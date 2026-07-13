@@ -5,7 +5,7 @@
 #define __INIT_H
 
 
-void init(void);
+void init(CAN_TxHeaderTypeDef TxHeader, CAN_HandleTypeDef hcan1);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
@@ -14,6 +14,22 @@ void SystemClock_Config(void);
 
 // needed by SystemClock_Config() and MX_GPIO_Init()
 void Error_Handler(void);
+
+
+extern CAN_HandleTypeDef hcan1;
+
+extern TIM_HandleTypeDef htim2;
+
+extern UART_HandleTypeDef huart3;
+
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
+
+extern CAN_TxHeaderTypeDef   TxHeader;
+extern CAN_RxHeaderTypeDef   RxHeader;
+extern uint8_t               TxData[8];
+extern uint8_t               RxData[8];
+extern uint32_t              TxMailbox;
+
 
 //Defines
 #define USER_Btn_Pin GPIO_PIN_13

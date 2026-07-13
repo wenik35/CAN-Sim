@@ -80,6 +80,11 @@ Discarded input sections
  .text          0x00000000        0x0 build/main.o
  .data          0x00000000        0x0 build/main.o
  .bss           0x00000000        0x0 build/main.o
+ .bss.TxMailbox
+                0x00000000        0x4 build/main.o
+ .bss.RxData    0x00000000        0x8 build/main.o
+ .bss.TxData    0x00000000        0x8 build/main.o
+ .bss.RxHeader  0x00000000       0x1c build/main.o
  .text          0x00000000        0x0 build/init.o
  .data          0x00000000        0x0 build/init.o
  .bss           0x00000000        0x0 build/init.o
@@ -88,6 +93,11 @@ Discarded input sections
  .bss.RxData    0x00000000        0x8 build/init.o
  .bss.TxData    0x00000000        0x8 build/init.o
  .bss.RxHeader  0x00000000       0x1c build/init.o
+ .bss.TxHeader  0x00000000       0x18 build/init.o
+ .bss.hspi1     0x00000000       0x58 build/init.o
+ .bss.hi2s3     0x00000000       0x48 build/init.o
+ .bss.hi2c1     0x00000000       0x54 build/init.o
+ .bss.hcan1     0x00000000       0x28 build/init.o
  .text          0x00000000        0x0 build/usb_host.o
  .data          0x00000000        0x0 build/usb_host.o
  .bss           0x00000000        0x0 build/usb_host.o
@@ -2372,15 +2382,15 @@ LOAD /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/crtn.o
  *(.bss)
  .bss           0x2000007c       0x1c /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/crtbegin.o
  *(.bss*)
- .bss.TxHeader  0x20000098       0x18 build/init.o
+ .bss.TxHeader  0x20000098       0x18 build/main.o
                 0x20000098                TxHeader
- .bss.hspi1     0x200000b0       0x58 build/init.o
+ .bss.hspi1     0x200000b0       0x58 build/main.o
                 0x200000b0                hspi1
- .bss.hi2s3     0x20000108       0x48 build/init.o
+ .bss.hi2s3     0x20000108       0x48 build/main.o
                 0x20000108                hi2s3
- .bss.hi2c1     0x20000150       0x54 build/init.o
+ .bss.hi2c1     0x20000150       0x54 build/main.o
                 0x20000150                hi2c1
- .bss.hcan1     0x200001a4       0x28 build/init.o
+ .bss.hcan1     0x200001a4       0x28 build/main.o
                 0x200001a4                hcan1
  .bss.Appli_state
                 0x200001cc        0x1 build/usb_host.o
@@ -2615,93 +2625,93 @@ LOAD /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a
  .comment       0x00000046        0x0 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/crtend.o
                                  0x24 (size before relaxing)
 
-.debug_info     0x00000000    0x247a9
- .debug_info    0x00000000       0xbb build/main.o
- .debug_info    0x000000bb     0x1d7c build/init.o
- .debug_info    0x00001e37      0xc12 build/usb_host.o
- .debug_info    0x00002a49     0x238b build/usbh_conf.o
- .debug_info    0x00004dd4      0x225 build/usbh_platform.o
- .debug_info    0x00004ff9      0xc35 build/stm32f4xx_it.o
- .debug_info    0x00005c2e     0x1b1c build/stm32f4xx_hal_msp.o
- .debug_info    0x0000774a     0x1b6a build/stm32f4xx_hal_hcd.o
- .debug_info    0x000092b4     0x2212 build/stm32f4xx_ll_usb.o
- .debug_info    0x0000b4c6      0xc20 build/stm32f4xx_hal_rcc.o
- .debug_info    0x0000c0e6      0x700 build/stm32f4xx_hal_rcc_ex.o
- .debug_info    0x0000c7e6      0x84e build/stm32f4xx_hal_gpio.o
- .debug_info    0x0000d034     0x11e0 build/stm32f4xx_hal_cortex.o
- .debug_info    0x0000e214      0xaf5 build/stm32f4xx_hal.o
- .debug_info    0x0000ed09     0x13cc build/stm32f4xx_hal_can.o
- .debug_info    0x000100d5     0x3c32 build/stm32f4xx_hal_i2c.o
- .debug_info    0x00013d07     0x1318 build/stm32f4xx_hal_i2s.o
- .debug_info    0x0001501f      0xecd build/stm32f4xx_hal_i2s_ex.o
- .debug_info    0x00015eec     0x1f7f build/stm32f4xx_hal_spi.o
- .debug_info    0x00017e6b      0x5b3 build/system_stm32f4xx.o
- .debug_info    0x0001841e     0x180b build/usbh_core.o
- .debug_info    0x00019c29     0x1605 build/usbh_ctlreq.o
- .debug_info    0x0001b22e     0x1147 build/usbh_ioreq.o
- .debug_info    0x0001c375      0xcd7 build/usbh_pipes.o
- .debug_info    0x0001d04c     0x1b14 build/usbh_cdc.o
- .debug_info    0x0001eb60      0x18c build/sysmem.o
- .debug_info    0x0001ecec       0x30 build/startup_stm32f407xx.o
- .debug_info    0x0001ed1c      0x7a5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
- .debug_info    0x0001f4c1      0x9c1 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
- .debug_info    0x0001fe82      0x770 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
- .debug_info    0x000205f2      0xfbf /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
- .debug_info    0x000215b1       0xe5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
- .debug_info    0x00021696      0x8a6 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
- .debug_info    0x00021f3c      0x71a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
- .debug_info    0x00022656      0x787 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
- .debug_info    0x00022ddd      0x700 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
- .debug_info    0x000234dd      0x110 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
- .debug_info    0x000235ed      0x21d /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
- .debug_info    0x0002380a      0x845 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
- .debug_info    0x0002404f       0x24 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x00024073      0x6fa /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_info    0x0002476d       0x3c /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+.debug_info     0x00000000    0x25872
+ .debug_info    0x00000000     0x1184 build/main.o
+ .debug_info    0x00001184     0x1d7c build/init.o
+ .debug_info    0x00002f00      0xc12 build/usb_host.o
+ .debug_info    0x00003b12     0x238b build/usbh_conf.o
+ .debug_info    0x00005e9d      0x225 build/usbh_platform.o
+ .debug_info    0x000060c2      0xc35 build/stm32f4xx_it.o
+ .debug_info    0x00006cf7     0x1b1c build/stm32f4xx_hal_msp.o
+ .debug_info    0x00008813     0x1b6a build/stm32f4xx_hal_hcd.o
+ .debug_info    0x0000a37d     0x2212 build/stm32f4xx_ll_usb.o
+ .debug_info    0x0000c58f      0xc20 build/stm32f4xx_hal_rcc.o
+ .debug_info    0x0000d1af      0x700 build/stm32f4xx_hal_rcc_ex.o
+ .debug_info    0x0000d8af      0x84e build/stm32f4xx_hal_gpio.o
+ .debug_info    0x0000e0fd     0x11e0 build/stm32f4xx_hal_cortex.o
+ .debug_info    0x0000f2dd      0xaf5 build/stm32f4xx_hal.o
+ .debug_info    0x0000fdd2     0x13cc build/stm32f4xx_hal_can.o
+ .debug_info    0x0001119e     0x3c32 build/stm32f4xx_hal_i2c.o
+ .debug_info    0x00014dd0     0x1318 build/stm32f4xx_hal_i2s.o
+ .debug_info    0x000160e8      0xecd build/stm32f4xx_hal_i2s_ex.o
+ .debug_info    0x00016fb5     0x1f7f build/stm32f4xx_hal_spi.o
+ .debug_info    0x00018f34      0x5b3 build/system_stm32f4xx.o
+ .debug_info    0x000194e7     0x180b build/usbh_core.o
+ .debug_info    0x0001acf2     0x1605 build/usbh_ctlreq.o
+ .debug_info    0x0001c2f7     0x1147 build/usbh_ioreq.o
+ .debug_info    0x0001d43e      0xcd7 build/usbh_pipes.o
+ .debug_info    0x0001e115     0x1b14 build/usbh_cdc.o
+ .debug_info    0x0001fc29      0x18c build/sysmem.o
+ .debug_info    0x0001fdb5       0x30 build/startup_stm32f407xx.o
+ .debug_info    0x0001fde5      0x7a5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
+ .debug_info    0x0002058a      0x9c1 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
+ .debug_info    0x00020f4b      0x770 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
+ .debug_info    0x000216bb      0xfbf /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
+ .debug_info    0x0002267a       0xe5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
+ .debug_info    0x0002275f      0x8a6 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
+ .debug_info    0x00023005      0x71a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
+ .debug_info    0x0002371f      0x787 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
+ .debug_info    0x00023ea6      0x700 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
+ .debug_info    0x000245a6      0x110 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
+ .debug_info    0x000246b6      0x21d /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
+ .debug_info    0x000248d3      0x845 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
+ .debug_info    0x00025118       0x24 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x0002513c      0x6fa /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_info    0x00025836       0x3c /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
 
-.debug_abbrev   0x00000000     0x57cf
- .debug_abbrev  0x00000000       0x66 build/main.o
- .debug_abbrev  0x00000066      0x290 build/init.o
- .debug_abbrev  0x000002f6      0x293 build/usb_host.o
- .debug_abbrev  0x00000589      0x3dd build/usbh_conf.o
- .debug_abbrev  0x00000966      0x12e build/usbh_platform.o
- .debug_abbrev  0x00000a94      0x183 build/stm32f4xx_it.o
- .debug_abbrev  0x00000c17      0x25b build/stm32f4xx_hal_msp.o
- .debug_abbrev  0x00000e72      0x2d6 build/stm32f4xx_hal_hcd.o
- .debug_abbrev  0x00001148      0x344 build/stm32f4xx_ll_usb.o
- .debug_abbrev  0x0000148c      0x2de build/stm32f4xx_hal_rcc.o
- .debug_abbrev  0x0000176a      0x1dc build/stm32f4xx_hal_rcc_ex.o
- .debug_abbrev  0x00001946      0x23f build/stm32f4xx_hal_gpio.o
- .debug_abbrev  0x00001b85      0x3ca build/stm32f4xx_hal_cortex.o
- .debug_abbrev  0x00001f4f      0x244 build/stm32f4xx_hal.o
- .debug_abbrev  0x00002193      0x29f build/stm32f4xx_hal_can.o
- .debug_abbrev  0x00002432      0x328 build/stm32f4xx_hal_i2c.o
- .debug_abbrev  0x0000275a      0x2b0 build/stm32f4xx_hal_i2s.o
- .debug_abbrev  0x00002a0a      0x2aa build/stm32f4xx_hal_i2s_ex.o
- .debug_abbrev  0x00002cb4      0x2be build/stm32f4xx_hal_spi.o
- .debug_abbrev  0x00002f72      0x11b build/system_stm32f4xx.o
- .debug_abbrev  0x0000308d      0x383 build/usbh_core.o
- .debug_abbrev  0x00003410      0x353 build/usbh_ctlreq.o
- .debug_abbrev  0x00003763      0x23d build/usbh_ioreq.o
- .debug_abbrev  0x000039a0      0x2a3 build/usbh_pipes.o
- .debug_abbrev  0x00003c43      0x37f build/usbh_cdc.o
- .debug_abbrev  0x00003fc2       0xeb build/sysmem.o
- .debug_abbrev  0x000040ad       0x1d build/startup_stm32f407xx.o
- .debug_abbrev  0x000040ca      0x1d5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
- .debug_abbrev  0x0000429f      0x250 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
- .debug_abbrev  0x000044ef      0x1c5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
- .debug_abbrev  0x000046b4      0x419 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
- .debug_abbrev  0x00004acd       0xa4 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
- .debug_abbrev  0x00004b71      0x1fd /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
- .debug_abbrev  0x00004d6e      0x14f /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
- .debug_abbrev  0x00004ebd      0x1e0 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
- .debug_abbrev  0x0000509d      0x164 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
- .debug_abbrev  0x00005201       0xcf /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
- .debug_abbrev  0x000052d0      0x11b /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
- .debug_abbrev  0x000053eb      0x23a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
- .debug_abbrev  0x00005625       0x14 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_abbrev  0x00005639      0x170 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_abbrev  0x000057a9       0x26 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+.debug_abbrev   0x00000000     0x58de
+ .debug_abbrev  0x00000000      0x175 build/main.o
+ .debug_abbrev  0x00000175      0x290 build/init.o
+ .debug_abbrev  0x00000405      0x293 build/usb_host.o
+ .debug_abbrev  0x00000698      0x3dd build/usbh_conf.o
+ .debug_abbrev  0x00000a75      0x12e build/usbh_platform.o
+ .debug_abbrev  0x00000ba3      0x183 build/stm32f4xx_it.o
+ .debug_abbrev  0x00000d26      0x25b build/stm32f4xx_hal_msp.o
+ .debug_abbrev  0x00000f81      0x2d6 build/stm32f4xx_hal_hcd.o
+ .debug_abbrev  0x00001257      0x344 build/stm32f4xx_ll_usb.o
+ .debug_abbrev  0x0000159b      0x2de build/stm32f4xx_hal_rcc.o
+ .debug_abbrev  0x00001879      0x1dc build/stm32f4xx_hal_rcc_ex.o
+ .debug_abbrev  0x00001a55      0x23f build/stm32f4xx_hal_gpio.o
+ .debug_abbrev  0x00001c94      0x3ca build/stm32f4xx_hal_cortex.o
+ .debug_abbrev  0x0000205e      0x244 build/stm32f4xx_hal.o
+ .debug_abbrev  0x000022a2      0x29f build/stm32f4xx_hal_can.o
+ .debug_abbrev  0x00002541      0x328 build/stm32f4xx_hal_i2c.o
+ .debug_abbrev  0x00002869      0x2b0 build/stm32f4xx_hal_i2s.o
+ .debug_abbrev  0x00002b19      0x2aa build/stm32f4xx_hal_i2s_ex.o
+ .debug_abbrev  0x00002dc3      0x2be build/stm32f4xx_hal_spi.o
+ .debug_abbrev  0x00003081      0x11b build/system_stm32f4xx.o
+ .debug_abbrev  0x0000319c      0x383 build/usbh_core.o
+ .debug_abbrev  0x0000351f      0x353 build/usbh_ctlreq.o
+ .debug_abbrev  0x00003872      0x23d build/usbh_ioreq.o
+ .debug_abbrev  0x00003aaf      0x2a3 build/usbh_pipes.o
+ .debug_abbrev  0x00003d52      0x37f build/usbh_cdc.o
+ .debug_abbrev  0x000040d1       0xeb build/sysmem.o
+ .debug_abbrev  0x000041bc       0x1d build/startup_stm32f407xx.o
+ .debug_abbrev  0x000041d9      0x1d5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
+ .debug_abbrev  0x000043ae      0x250 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
+ .debug_abbrev  0x000045fe      0x1c5 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
+ .debug_abbrev  0x000047c3      0x419 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
+ .debug_abbrev  0x00004bdc       0xa4 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
+ .debug_abbrev  0x00004c80      0x1fd /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
+ .debug_abbrev  0x00004e7d      0x14f /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
+ .debug_abbrev  0x00004fcc      0x1e0 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
+ .debug_abbrev  0x000051ac      0x164 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
+ .debug_abbrev  0x00005310       0xcf /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
+ .debug_abbrev  0x000053df      0x11b /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
+ .debug_abbrev  0x000054fa      0x23a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
+ .debug_abbrev  0x00005734       0x14 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_abbrev  0x00005748      0x170 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_abbrev  0x000058b8       0x26 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
 
 .debug_loc      0x00000000    0x14a7b
  .debug_loc     0x00000000       0x20 build/main.o
@@ -2846,53 +2856,53 @@ LOAD /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a
  .debug_ranges  0x00001140       0x10 build/sysmem.o
  .debug_ranges  0x00001150       0x20 build/startup_stm32f407xx.o
 
-.debug_line     0x00000000    0x16be0
- .debug_line    0x00000000       0x66 build/main.o
- .debug_line    0x00000066      0x722 build/init.o
- .debug_line    0x00000788      0x1d6 build/usb_host.o
- .debug_line    0x0000095e      0x696 build/usbh_conf.o
- .debug_line    0x00000ff4      0x133 build/usbh_platform.o
- .debug_line    0x00001127      0x272 build/stm32f4xx_it.o
- .debug_line    0x00001399      0x4d1 build/stm32f4xx_hal_msp.o
- .debug_line    0x0000186a     0x14cb build/stm32f4xx_hal_hcd.o
- .debug_line    0x00002d35     0x1f36 build/stm32f4xx_ll_usb.o
- .debug_line    0x00004c6b      0xb68 build/stm32f4xx_hal_rcc.o
- .debug_line    0x000057d3      0x5f0 build/stm32f4xx_hal_rcc_ex.o
- .debug_line    0x00005dc3      0x691 build/stm32f4xx_hal_gpio.o
- .debug_line    0x00006454      0x7e1 build/stm32f4xx_hal_cortex.o
- .debug_line    0x00006c35      0x511 build/stm32f4xx_hal.o
- .debug_line    0x00007146     0x10d2 build/stm32f4xx_hal_can.o
- .debug_line    0x00008218     0x53c5 build/stm32f4xx_hal_i2c.o
- .debug_line    0x0000d5dd     0x1358 build/stm32f4xx_hal_i2s.o
- .debug_line    0x0000e935      0xfdf build/stm32f4xx_hal_i2s_ex.o
- .debug_line    0x0000f914     0x23c0 build/stm32f4xx_hal_spi.o
- .debug_line    0x00011cd4      0x1f0 build/system_stm32f4xx.o
- .debug_line    0x00011ec4      0xddf build/usbh_core.o
- .debug_line    0x00012ca3      0xd58 build/usbh_ctlreq.o
- .debug_line    0x000139fb      0x289 build/usbh_ioreq.o
- .debug_line    0x00013c84      0x209 build/usbh_pipes.o
- .debug_line    0x00013e8d      0x9dd build/usbh_cdc.o
- .debug_line    0x0001486a      0x137 build/sysmem.o
- .debug_line    0x000149a1       0x73 build/startup_stm32f407xx.o
- .debug_line    0x00014a14      0x1c8 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
- .debug_line    0x00014bdc      0x4c3 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
- .debug_line    0x0001509f      0x1b4 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
- .debug_line    0x00015253      0x58a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
- .debug_line    0x000157dd      0x130 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
- .debug_line    0x0001590d      0x2bc /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
- .debug_line    0x00015bc9      0x112 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
- .debug_line    0x00015cdb      0x1e6 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
- .debug_line    0x00015ec1      0x134 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
- .debug_line    0x00015ff5      0x101 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
- .debug_line    0x000160f6      0x187 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
- .debug_line    0x0001627d      0x2e1 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
- .debug_line    0x0001655e       0x4e /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x000165ac      0x5ea /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_line    0x00016b96       0x4a /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+.debug_line     0x00000000    0x16d35
+ .debug_line    0x00000000      0x1bb build/main.o
+ .debug_line    0x000001bb      0x722 build/init.o
+ .debug_line    0x000008dd      0x1d6 build/usb_host.o
+ .debug_line    0x00000ab3      0x696 build/usbh_conf.o
+ .debug_line    0x00001149      0x133 build/usbh_platform.o
+ .debug_line    0x0000127c      0x272 build/stm32f4xx_it.o
+ .debug_line    0x000014ee      0x4d1 build/stm32f4xx_hal_msp.o
+ .debug_line    0x000019bf     0x14cb build/stm32f4xx_hal_hcd.o
+ .debug_line    0x00002e8a     0x1f36 build/stm32f4xx_ll_usb.o
+ .debug_line    0x00004dc0      0xb68 build/stm32f4xx_hal_rcc.o
+ .debug_line    0x00005928      0x5f0 build/stm32f4xx_hal_rcc_ex.o
+ .debug_line    0x00005f18      0x691 build/stm32f4xx_hal_gpio.o
+ .debug_line    0x000065a9      0x7e1 build/stm32f4xx_hal_cortex.o
+ .debug_line    0x00006d8a      0x511 build/stm32f4xx_hal.o
+ .debug_line    0x0000729b     0x10d2 build/stm32f4xx_hal_can.o
+ .debug_line    0x0000836d     0x53c5 build/stm32f4xx_hal_i2c.o
+ .debug_line    0x0000d732     0x1358 build/stm32f4xx_hal_i2s.o
+ .debug_line    0x0000ea8a      0xfdf build/stm32f4xx_hal_i2s_ex.o
+ .debug_line    0x0000fa69     0x23c0 build/stm32f4xx_hal_spi.o
+ .debug_line    0x00011e29      0x1f0 build/system_stm32f4xx.o
+ .debug_line    0x00012019      0xddf build/usbh_core.o
+ .debug_line    0x00012df8      0xd58 build/usbh_ctlreq.o
+ .debug_line    0x00013b50      0x289 build/usbh_ioreq.o
+ .debug_line    0x00013dd9      0x209 build/usbh_pipes.o
+ .debug_line    0x00013fe2      0x9dd build/usbh_cdc.o
+ .debug_line    0x000149bf      0x137 build/sysmem.o
+ .debug_line    0x00014af6       0x73 build/startup_stm32f407xx.o
+ .debug_line    0x00014b69      0x1c8 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-malloc.o)
+ .debug_line    0x00014d31      0x4c3 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mallocr.o)
+ .debug_line    0x000151f4      0x1b4 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-mlock.o)
+ .debug_line    0x000153a8      0x58a /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-findfp.o)
+ .debug_line    0x00015932      0x130 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
+ .debug_line    0x00015a62      0x2bc /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-reent.o)
+ .debug_line    0x00015d1e      0x112 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-impure.o)
+ .debug_line    0x00015e30      0x1e6 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-sbrkr.o)
+ .debug_line    0x00016016      0x134 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-errno.o)
+ .debug_line    0x0001614a      0x101 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
+ .debug_line    0x0001624b      0x187 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-lock.o)
+ .debug_line    0x000163d2      0x2e1 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-freer.o)
+ .debug_line    0x000166b3       0x4e /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x00016701      0x5ea /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_line    0x00016ceb       0x4a /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
 
 .debug_str      0x00000000     0x70ad
  .debug_str     0x00000000     0x70ad build/main.o
-                                0x189 (size before relaxing)
+                                0xcd5 (size before relaxing)
  .debug_str     0x000070ad        0x0 build/init.o
                                0x1154 (size before relaxing)
  .debug_str     0x000070ad        0x0 build/usb_host.o
@@ -3543,8 +3553,8 @@ RCC_IRQHandler                                    build/startup_stm32f407xx.o
 RTC_Alarm_IRQHandler                              build/startup_stm32f407xx.o
 RTC_WKUP_IRQHandler                               build/startup_stm32f407xx.o
 Reset_Handler                                     build/startup_stm32f407xx.o
-RxData                                            build/init.o
-RxHeader                                          build/init.o
+RxData                                            build/main.o
+RxHeader                                          build/main.o
 SDIO_IRQHandler                                   build/startup_stm32f407xx.o
 SPI1_IRQHandler                                   build/startup_stm32f407xx.o
 SPI2_IRQHandler                                   build/startup_stm32f407xx.o
@@ -3577,9 +3587,9 @@ TIM8_BRK_TIM12_IRQHandler                         build/startup_stm32f407xx.o
 TIM8_CC_IRQHandler                                build/startup_stm32f407xx.o
 TIM8_TRG_COM_TIM14_IRQHandler                     build/startup_stm32f407xx.o
 TIM8_UP_TIM13_IRQHandler                          build/startup_stm32f407xx.o
-TxData                                            build/init.o
-TxHeader                                          build/init.o
-TxMailbox                                         build/init.o
+TxData                                            build/main.o
+TxHeader                                          build/main.o
+TxMailbox                                         build/main.o
 UART4_IRQHandler                                  build/startup_stm32f407xx.o
 UART5_IRQHandler                                  build/startup_stm32f407xx.o
 USART1_IRQHandler                                 build/startup_stm32f407xx.o
@@ -3970,13 +3980,13 @@ free                                              /usr/lib/gcc/arm-none-eabi/15.
 g_pfnVectors                                      build/startup_stm32f407xx.o
 hUsbHostFS                                        build/usb_host.o
 hardware_init_hook                                /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o
-hcan1                                             build/init.o
+hcan1                                             build/main.o
                                                   build/stm32f4xx_it.o
 hhcd_USB_OTG_FS                                   build/usbh_conf.o
                                                   build/stm32f4xx_it.o
-hi2c1                                             build/init.o
-hi2s3                                             build/init.o
-hspi1                                             build/init.o
+hi2c1                                             build/main.o
+hi2s3                                             build/main.o
+hspi1                                             build/main.o
 init                                              build/init.o
                                                   build/main.o
 initialise_monitor_handles                        build/syscalls.o

@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccXtVuW6.s 			page 1
+ARM GAS  /tmp/ccJXngYM.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -29,11 +29,10 @@ ARM GAS  /tmp/ccXtVuW6.s 			page 1
   27              	main:
   28              	.LFB134:
    1:Src/main.c    **** #include "main.h"
-   2:Src/main.c    **** #include "usb_host.h"
-   3:Src/main.c    **** 
-   4:Src/main.c    **** int main(void)
-   5:Src/main.c    **** {
-  29              		.loc 1 5 1 view -0
+   2:Src/main.c    **** 
+   3:Src/main.c    **** int main(void)
+   4:Src/main.c    **** {
+  29              		.loc 1 4 1 view -0
   30              		.cfi_startproc
   31              		@ Volatile: function does not return.
   32              		@ args = 0, pretend = 0, frame = 0
@@ -43,38 +42,143 @@ ARM GAS  /tmp/ccXtVuW6.s 			page 1
   36              		.cfi_def_cfa_offset 8
   37              		.cfi_offset 3, -8
   38              		.cfi_offset 14, -4
-   6:Src/main.c    ****     init();
-  39              		.loc 1 6 5 view .LVU1
+   5:Src/main.c    ****   init();
+  39              		.loc 1 5 3 view .LVU1
   40 0002 FFF7FEFF 		bl	init
   41              	.LVL0:
   42              	.L2:
-   7:Src/main.c    ****   while (1)
-  43              		.loc 1 7 3 view .LVU2
-   8:Src/main.c    ****   {
-   9:Src/main.c    ****     /* USER CODE END WHILE */
-  10:Src/main.c    ****     MX_USB_HOST_Process();
-  44              		.loc 1 10 5 discriminator 2 view .LVU3
+   6:Src/main.c    ****   while (1)
+  43              		.loc 1 6 3 view .LVU2
+   7:Src/main.c    ****   {
+   8:Src/main.c    ****     MX_USB_HOST_Process();
+  44              		.loc 1 8 5 view .LVU3
   45 0006 FFF7FEFF 		bl	MX_USB_HOST_Process
   46              	.LVL1:
-   7:Src/main.c    ****   while (1)
-  47              		.loc 1 7 9 view .LVU4
-ARM GAS  /tmp/ccXtVuW6.s 			page 2
+   9:Src/main.c    ****     // Showcase Loop
+  10:Src/main.c    ****     if (0)
+  47              		.loc 1 10 5 view .LVU4
+   6:Src/main.c    ****   {
+ARM GAS  /tmp/ccJXngYM.s 			page 2
 
 
-  48 000a FCE7     		b	.L2
-  49              		.cfi_endproc
-  50              	.LFE134:
-  52              		.text
-  53              	.Letext0:
-  54              		.file 2 "Inc/usb_host.h"
-  55              		.file 3 "Inc/init.h"
-ARM GAS  /tmp/ccXtVuW6.s 			page 3
+  48              		.loc 1 6 9 view .LVU5
+  49 000a FCE7     		b	.L2
+  50              		.cfi_endproc
+  51              	.LFE134:
+  53              		.global	TxMailbox
+  54              		.section	.bss.TxMailbox,"aw",%nobits
+  55              		.align	2
+  58              	TxMailbox:
+  59 0000 00000000 		.space	4
+  60              		.global	RxData
+  61              		.section	.bss.RxData,"aw",%nobits
+  62              		.align	2
+  65              	RxData:
+  66 0000 00000000 		.space	8
+  66      00000000 
+  67              		.global	TxData
+  68              		.section	.bss.TxData,"aw",%nobits
+  69              		.align	2
+  72              	TxData:
+  73 0000 00000000 		.space	8
+  73      00000000 
+  74              		.global	RxHeader
+  75              		.section	.bss.RxHeader,"aw",%nobits
+  76              		.align	2
+  79              	RxHeader:
+  80 0000 00000000 		.space	28
+  80      00000000 
+  80      00000000 
+  80      00000000 
+  80      00000000 
+  81              		.global	TxHeader
+  82              		.section	.bss.TxHeader,"aw",%nobits
+  83              		.align	2
+  86              	TxHeader:
+  87 0000 00000000 		.space	24
+  87      00000000 
+  87      00000000 
+  87      00000000 
+  87      00000000 
+  88              		.global	hspi1
+  89              		.section	.bss.hspi1,"aw",%nobits
+  90              		.align	2
+  93              	hspi1:
+  94 0000 00000000 		.space	88
+  94      00000000 
+  94      00000000 
+  94      00000000 
+  94      00000000 
+  95              		.global	hi2s3
+  96              		.section	.bss.hi2s3,"aw",%nobits
+  97              		.align	2
+ 100              	hi2s3:
+ 101 0000 00000000 		.space	72
+ 101      00000000 
+ 101      00000000 
+ 101      00000000 
+ 101      00000000 
+ARM GAS  /tmp/ccJXngYM.s 			page 3
+
+
+ 102              		.global	hi2c1
+ 103              		.section	.bss.hi2c1,"aw",%nobits
+ 104              		.align	2
+ 107              	hi2c1:
+ 108 0000 00000000 		.space	84
+ 108      00000000 
+ 108      00000000 
+ 108      00000000 
+ 108      00000000 
+ 109              		.global	hcan1
+ 110              		.section	.bss.hcan1,"aw",%nobits
+ 111              		.align	2
+ 114              	hcan1:
+ 115 0000 00000000 		.space	40
+ 115      00000000 
+ 115      00000000 
+ 115      00000000 
+ 115      00000000 
+ 116              		.text
+ 117              	.Letext0:
+ 118              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 119              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 120              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 121              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 122              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 123              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 124              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 125              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h"
+ 126              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h"
+ 127              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 128              		.file 12 "Inc/main.h"
+ 129              		.file 13 "Inc/usb_host.h"
+ 130              		.file 14 "Inc/init.h"
+ARM GAS  /tmp/ccJXngYM.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-     /tmp/ccXtVuW6.s:21     .text.main:00000000 $t
-     /tmp/ccXtVuW6.s:27     .text.main:00000000 main
+     /tmp/ccJXngYM.s:21     .text.main:00000000 $t
+     /tmp/ccJXngYM.s:27     .text.main:00000000 main
+     /tmp/ccJXngYM.s:58     .bss.TxMailbox:00000000 TxMailbox
+     /tmp/ccJXngYM.s:55     .bss.TxMailbox:00000000 $d
+     /tmp/ccJXngYM.s:65     .bss.RxData:00000000 RxData
+     /tmp/ccJXngYM.s:62     .bss.RxData:00000000 $d
+     /tmp/ccJXngYM.s:72     .bss.TxData:00000000 TxData
+     /tmp/ccJXngYM.s:69     .bss.TxData:00000000 $d
+     /tmp/ccJXngYM.s:79     .bss.RxHeader:00000000 RxHeader
+     /tmp/ccJXngYM.s:76     .bss.RxHeader:00000000 $d
+     /tmp/ccJXngYM.s:86     .bss.TxHeader:00000000 TxHeader
+     /tmp/ccJXngYM.s:83     .bss.TxHeader:00000000 $d
+     /tmp/ccJXngYM.s:93     .bss.hspi1:00000000 hspi1
+     /tmp/ccJXngYM.s:90     .bss.hspi1:00000000 $d
+     /tmp/ccJXngYM.s:100    .bss.hi2s3:00000000 hi2s3
+     /tmp/ccJXngYM.s:97     .bss.hi2s3:00000000 $d
+     /tmp/ccJXngYM.s:107    .bss.hi2c1:00000000 hi2c1
+     /tmp/ccJXngYM.s:104    .bss.hi2c1:00000000 $d
+     /tmp/ccJXngYM.s:114    .bss.hcan1:00000000 hcan1
+     /tmp/ccJXngYM.s:111    .bss.hcan1:00000000 $d
 
 UNDEFINED SYMBOLS
 init

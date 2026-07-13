@@ -8,6 +8,13 @@ UART_HandleTypeDef huart3;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
+CAN_TxHeaderTypeDef   TxHeader;
+CAN_RxHeaderTypeDef   RxHeader;
+uint8_t               TxData[8];
+uint8_t               RxData[8];
+uint32_t              TxMailbox;
+
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -16,26 +23,80 @@ static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_TIM2_Init(void);
 
-void init(void){
-      /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-      HAL_Init();
+void init(CAN_TxHeaderTypeDef TxHeader, CAN_HandleTypeDef hcan1){
 
-      /* Configure the system clock */
-      SystemClock_Config();
+  /* USER CODE BEGIN 1 */
 
-      /* Initialize all configured peripherals */
-      MX_GPIO_Init();
-      MX_CAN1_Init();
-      MX_USART3_UART_Init();
-      MX_USB_OTG_FS_PCD_Init();
-      MX_TIM2_Init();
-    /* USER CODE BEGIN 2 */
-      HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  /* USER CODE END 1 */
 
-      HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET); //SLEEP must be high
-      /* USER CODE END 2 */
+  /* MCU Configuration--------------------------------------------------------*/
 
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_CAN1_Init();
+  MX_USART3_UART_Init();
+  MX_USB_OTG_FS_PCD_Init();
+  MX_TIM2_Init();
+  /* USER CODE BEGIN 2 */
+  // --- STEP 1: CAN Filter Configuration ---
+  // Setting all IDs and Masks to 0 accepts EVERY incoming message for testing purposes.
+  CAN_FilterTypeDef sFilterConfig;
+
+  sFilterConfig.FilterBank = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdLow = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdLow = 0x0000;
+  sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.SlaveStartFilterBank = 14;
+
+  if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 2: Start the CAN Peripheral ---
+  if (HAL_CAN_Start(&hcan1) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 3: Activate RX Interrupt Notifications ---
+  if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 4: Prepare Tx Message Header Attributes ---
+  TxHeader.StdId = 0x102;          // Example Message Identifier (Standard ID)
+  TxHeader.RTR = CAN_RTR_DATA;     // We are sending data frames, not remote requests
+  TxHeader.IDE = CAN_ID_STD;       // Standard 11-bit identifier format
+  TxHeader.DLC = 4;                // Sending 4 bytes of data payload
+  TxHeader.TransmitGlobalTime = DISABLE;
+
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET); //SLEEP PIN HIGH
+  /* USER CODE END 2 */
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -341,7 +402,44 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+  // Retrieve the message from the FIFO buffer
+  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
+  {
+    // Headlights
+    if (RxHeader.StdId == 0x102 && RxHeader.DLC == 1)
+    {
+      if (RxData[0] == 0x11) {
+      	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+      } else {
+      	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
+      }
+    }
 
+    // Bonnet
+    if (RxHeader.StdId == 0x203 && RxHeader.DLC == 1)
+    {
+      if (RxData[0] == 0x11) {
+      	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
+      } else {
+      	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 800);
+      }
+    }
+
+    // Wheels
+    if (RxHeader.StdId == 0x304 && RxHeader.DLC == 1)
+    {
+      if (RxData[0] == 0x11) {
+      	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_SET);
+      } else {
+      	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_PIN_RESET);
+      }
+    }
+
+    // Wheels
+  }
+}
 /* USER CODE END 4 */
 
 /**
