@@ -1,0 +1,79 @@
+ARM GAS  /tmp/cctbNwVT.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Src/main.c"
+  20              		.section	.text.main,"ax",%progbits
+  21              		.align	1
+  22              		.global	main
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	main:
+  28              	.LFB134:
+   1:Src/main.c    **** #include "main.h"
+   2:Src/main.c    **** 
+   3:Src/main.c    **** 
+   4:Src/main.c    **** int main(void)
+   5:Src/main.c    **** {
+  29              		.loc 1 5 1 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34 0000 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+   6:Src/main.c    ****   init();
+  39              		.loc 1 6 3 view .LVU1
+  40 0002 FFF7FEFF 		bl	init
+  41              	.LVL0:
+  42              	.L2:
+   7:Src/main.c    ****   while (1)
+  43              		.loc 1 7 3 view .LVU2
+   8:Src/main.c    ****   {
+   9:Src/main.c    ****       // SHOWCASE LOOP
+  10:Src/main.c    ****           if (0) {
+  44              		.loc 1 10 11 view .LVU3
+   7:Src/main.c    ****   while (1)
+  45              		.loc 1 7 9 view .LVU4
+  46 0006 FEE7     		b	.L2
+  47              		.cfi_endproc
+ARM GAS  /tmp/cctbNwVT.s 			page 2
+
+
+  48              	.LFE134:
+  50              		.text
+  51              	.Letext0:
+  52              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+  53              		.file 3 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h"
+  54              		.file 4 "Inc/init.h"
+ARM GAS  /tmp/cctbNwVT.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/cctbNwVT.s:21     .text.main:00000000 $t
+     /tmp/cctbNwVT.s:27     .text.main:00000000 main
+
+UNDEFINED SYMBOLS
+init

@@ -1,0 +1,18 @@
+version: '3'
+services:
+  can-sim-terminal:
+    build:
+      context: ..
+      dockerfile: python-terminal/Dockerfile
+    image: can-sim-terminal
+    container_name: can-sim-terminal
+    ports:
+      - '5000:5000'
+    environment:
+      - PYXTERM_CMD=zsh
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+    privileged: true
+    device_cgroup_rules:
+      - 'c 166:* rwm'
+      - 'c 189:* rwm'

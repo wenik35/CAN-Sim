@@ -1,0 +1,148 @@
+id: 79sFHo6ONB1S25cTN7emXmOibQ2HNWb2G9X3Xn2x
+createdBy: Mj92OSQdrbcE
+dateCreated: 1704715062608
+name: PyTermJS - Ubuntu Terminal
+meta:
+  logo: >-
+    https://repository-images.githubusercontent.com/487803615/83e1b148-5e81-4733-8ffc-e9ac5340547e
+  description: >-
+    This classroom provides base implementation for running a terminal-server on
+    Ubuntu 22.04. Make sure that one participant shares a pytermjs session
+    directly or from a docker file as described <a
+    href="https://github.com/edrys-labs/module-pyxtermjs">here</a>
+    or run:
+
+    <br><br>
+
+    <code style="margin-bottom: 5px">docker run -it -p 5000:5000
+    edryslabs/module-pyxtermjs</code>
+
+    <hr>
+
+    <code>docker run -it -p 5000:5000
+    edryslabs/module-pyxtermjs:development</code>
+
+    <hr>
+
+    <code>docker run -it -p 5000:5000
+    --device=/dev/ttyACM0:/dev/ttyACM0 --device-cgroup-rule='c 166:* rmv'
+    --device-cgroup-rule='c 189:* rmv'
+    edryslabs/module-pyxtermjs:arduino</code>
+  selfAssign: true
+  defaultNumberOfRooms: 0
+members:
+  teacher: []
+  student: []
+modules:
+  - url: https://edrys-labs.github.io/module-markdown-it/index.html
+    config: >
+      # Welcome to the Edrys - PyTermJS
+
+
+      With the help of the edrys module
+
+      [PyTermJS](https://github.com/edrys-labs/module-pyxtermjs)
+
+      it is possible to share a terminal-session for different purposes with
+      your peers.
+
+      Therefore one will have start either PyTermJS directly on your computer,
+
+      or you can run some of our docker containers directly.
+
+      Thus, you will have to install Python or [Docker](#docker) at least on one
+      machine that runs in station mode.
+
+
+      ``` bash
+
+      $ docker run -it -p 5000:5000 edryslabs/module-pyxtermjs
+
+      ```
+
+
+      To start an entire development environment with gcc, java, haskell,
+      nodejs, etc.
+
+      run the following command
+
+
+      ``` bash
+
+      $ docker run -it -p 5000:5000 edryslabs/module-pyxtermjs:development
+
+      ```
+
+
+      In case you want to run an Arduino environment execute the following, it
+      comes
+
+      with an
+
+      [arduino-cli](https://arduino.github.io/arduino-cli/0.35/),
+
+      some base libraries and support for arduino avr and megaavr.
+
+      For more information checkout the
+
+      [Dockerfile](https://github.com/edrys-labs/module-pyxtermjs/blob/master/docker/arduino/Dockerfile).
+
+
+      ``` bash
+       $ docker run -it -p 5000:5000 \
+          --device=/dev/ttyACM0:/dev/ttyACM0 \
+          --device-cgroup-rule='c 166:* rmv' \
+          --device-cgroup-rule='c 189:* rmv' \
+          edryslabs/module-pyxtermjs:arduino
+      ```
+
+
+      ## Open a station
+       
+      If you own this course, simply open the settings by clicking onto the
+      gear-symbol, switch to "station" settings and open or share the link.
+
+      Otherwise simply copy the entire url and replace `classroom` by `station`
+      ...
+
+
+      Afterwards a new station will appear on the navigation bar on the left.
+      Click on it and you will be redirected to the station.
+
+      ## Docker
+
+
+      Docker is an open platform for developing, shipping, and running
+      applications that separates applications from infrastructure to enable
+      quick software delivery.
+
+
+      [Installation](https://docs.docker.com/engine/install/)
+
+
+      ### Short Introduction
+
+
+      <iframe width="560" height="315"
+      src="https://www.youtube.com/embed/Gjnup-PuquQ?si=FWcDvC369Qim9q7c"
+      title="YouTube video player" frameborder="0" allow="accelerometer;
+      autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;
+      web-share" allowfullscreen></iframe>
+    studentConfig: ''
+    teacherConfig: ''
+    stationConfig: ''
+    showInCustom: lobby
+    width: full
+    height: huge
+  - url: https://edrys-labs.github.io/module-pyxtermjs/index.html
+    config: ''
+    studentConfig: ''
+    teacherConfig: ''
+    stationConfig:
+      server: http://localhost:5000/pty
+      enable:
+        teacher: true
+        student: true
+    showInCustom: station
+    width: full
+    height: medium

@@ -1,0 +1,101 @@
+name: Docker Build and Publish
+on:
+  push:
+    branches: 'master'
+    paths:
+      - 'Dockerfile'
+      - 'docker-compose*.yml'
+      - 'docker/**'
+      - 'requirements.txt'
+      - '_assets/**'
+      - '.github/workflows/docker-publish.yml'
+jobs:
+  base:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push Docker image (BASE)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          platforms: linux/amd64
+          cache-from: type=registry,ref=edryslabs/module-pyxtermjs:base-cache
+          cache-to: type=registry,ref=edryslabs/module-pyxtermjs:base-cache,mode=max
+          tags: |
+            edryslabs/module-pyxtermjs:base
+            edryslabs/module-pyxtermjs:base-${{ github.run_number }}
+  arduino:
+    runs-on: ubuntu-latest
+    needs: base
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Wait a moment for base image to be available
+      - name: Wait for base image
+        run: sleep 30
+      - name: Build and push Docker image (ARDUINO)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./docker/arduino
+          file: ./docker/arduino/Dockerfile
+          push: true
+          platforms: linux/amd64
+          cache-from: type=registry,ref=edryslabs/module-pyxtermjs:arduino-cache
+          cache-to: type=registry,ref=edryslabs/module-pyxtermjs:arduino-cache,mode=max
+          tags: |
+            edryslabs/module-pyxtermjs:arduino-v${{ github.run_number }}
+            edryslabs/module-pyxtermjs:latest
+  development:
+    runs-on: ubuntu-latest
+    needs: base
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Wait a moment for base image to be available
+      - name: Wait for base image
+        run: sleep 30
+      - name: Build and push Docker image (DEVELOPMENT)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./docker/development
+          file: ./docker/development/Dockerfile
+          push: true
+          platforms: linux/amd64
+          cache-from: type=registry,ref=edryslabs/module-pyxtermjs:development-cache
+          cache-to: type=registry,ref=edryslabs/module-pyxtermjs:development-cache,mode=max
+          tags: |
+            edryslabs/module-pyxtermjs:development-v${{ github.run_number }}
+            edryslabs/module-pyxtermjs:development

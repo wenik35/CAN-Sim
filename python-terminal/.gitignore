@@ -1,0 +1,9 @@
+dist
+.DS_Store
+venv
+.vscode
+*egg-info*
+build
+__pycache__
+.parcel-cache
+node_modules

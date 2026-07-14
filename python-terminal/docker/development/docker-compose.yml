@@ -1,0 +1,10 @@
+version: '3'
+services:
+  pyxtermjs:
+    build: .
+    image: edryslabs/module-pyxtermjs:development
+    container_name: module-pyxtermjs_development
+    ports:
+      - '5000:5000'
+    environment:
+      - PYXTERM_CMD=zsh

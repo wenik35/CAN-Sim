@@ -49,6 +49,12 @@ I2S_HandleTypeDef hi2s3;
 
 SPI_HandleTypeDef hspi1;
 
+CAN_TxHeaderTypeDef   TxHeader;
+CAN_RxHeaderTypeDef   RxHeader;
+uint8_t               TxData[8];
+uint8_t               RxData[8];
+uint32_t              TxMailbox;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -106,6 +112,45 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
+  
+  // --- STEP 1: CAN Filter Configuration ---
+  // Setting all IDs and Masks to 0 accepts EVERY incoming message for testing purposes.
+  CAN_FilterTypeDef sFilterConfig;
+
+  sFilterConfig.FilterBank = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdLow = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdLow = 0x0000;
+  sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.SlaveStartFilterBank = 14;
+
+  if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 2: Start the CAN Peripheral ---
+  if (HAL_CAN_Start(&hcan1) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 3: Activate RX Interrupt Notifications ---
+  if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 4: Prepare Tx Message Header Attributes ---
+  // TxHeader.StdId = 0x102;          // Example Message Identifier (Standard ID)
+  TxHeader.RTR = CAN_RTR_DATA;     // We are sending data frames, not remote requests
+  TxHeader.IDE = CAN_ID_STD;       // Standard 11-bit identifier format
+  // TxHeader.DLC = 4;                // Sending 4 bytes of data payload
+  TxHeader.TransmitGlobalTime = DISABLE;
 
   /* USER CODE END 2 */
 
@@ -116,7 +161,62 @@ int main(void)
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
-    /* USER CODE BEGIN 3 */
+    // Showcase Loop
+    if (0)
+    {
+      // ==========================================
+      // Section 1: Headlights
+      // ==========================================
+      TxHeader.StdId = 0x102;          // Set the ID
+      TxHeader.DLC = 1;                // 1 byte of data
+
+      // Activate Headlights
+      TxData[0] = 0x11;
+      
+      // Push Message 1 into a free hardware mailbox
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+      {
+          // Handle transmission error
+      }
+      HAL_Delay(1000);
+      
+      // Deactivate Headlights
+      TxData[0] = 0x22;
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {}
+      HAL_Delay(1000);
+
+      // ==========================================
+      // Section 2: Bonnet
+      // ==========================================
+      TxHeader.StdId = 0x203;
+      TxHeader.DLC = 1;
+
+      // Open bonnet
+      TxData[0] = 0x11;
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {}
+      HAL_Delay(1000);
+      
+      // Close bonnet
+      TxData[0] = 0x22;
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {}
+      HAL_Delay(1000);
+
+      // ==========================================
+      // Section 3: Wheels
+      // ==========================================
+      TxHeader.StdId = 0x304;
+      TxHeader.DLC = 1;
+
+      // Spin wheels
+      TxData[0] = 0x11;
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {}
+      HAL_Delay(1000);
+      
+      // Stop wheels
+      TxData[0] = 0x22;
+      if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {}
+      HAL_Delay(1000);
+    }
   }
   /* USER CODE END 3 */
 }

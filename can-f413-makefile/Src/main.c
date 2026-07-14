@@ -43,10 +43,21 @@
 CAN_HandleTypeDef hcan1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
 
 UART_HandleTypeDef huart3;
 
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
+
+CAN_TxHeaderTypeDef   TxHeader;
+CAN_RxHeaderTypeDef   RxHeader;
+uint8_t               TxData[8];
+uint8_t               RxData[8];
+uint32_t              TxMailbox;
+
+uint8_t wheels_running;
+uint8_t wheel_speed;
 
 /* USER CODE BEGIN PV */
 
@@ -59,6 +70,8 @@ static void MX_CAN1_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM5_Init(void);
+static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -101,26 +114,92 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_TIM2_Init();
+  MX_TIM5_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  // --- STEP 1: CAN Filter Configuration ---
+  // Setting all IDs and Masks to 0 accepts EVERY incoming message for testing purposes.
+  CAN_FilterTypeDef sFilterConfig;
 
+  sFilterConfig.FilterBank = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdLow = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdLow = 0x0000;
+  sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.SlaveStartFilterBank = 14;
+
+  if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 2: Start the CAN Peripheral ---
+  if (HAL_CAN_Start(&hcan1) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 3: Activate RX Interrupt Notifications ---
+  if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  // --- STEP 4: Prepare Tx Message Header Attributes ---
+  TxHeader.StdId = 0x102;          // Example Message Identifier (Standard ID)
+  TxHeader.RTR = CAN_RTR_DATA;     // We are sending data frames, not remote requests
+  TxHeader.IDE = CAN_ID_STD;       // Standard 11-bit identifier format
+  TxHeader.DLC = 1;                // Sending 4 bytes of data payload
+  TxHeader.TransmitGlobalTime = DISABLE;
+
+  wheels_running = 0;
+  wheel_speed = 0;
+  
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_14, GPIO_PIN_SET); //SLEEP PIN HIGH
   /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0); //internal led
-    HAL_Delay(1000);
+    
+    // SHOWCASE LOOP
+    if (0) {
+      // Internal LED
+      HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+      HAL_Delay(1000);
+      HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+      HAL_Delay(1000);
+      
+      // Headlight LEDs
+      HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+      HAL_Delay(1000);
+      HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+      HAL_Delay(1000);
 
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1000);
-    HAL_Delay(1000);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
-    HAL_Delay(1000);
+      // Bonnet servo
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
+      HAL_Delay(1000);
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 800);
+      HAL_Delay(1000);
 
-    /* USER CODE BEGIN 3 */
+      // Wheel motors
+      //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_9); // Motors 1
+      HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_11); // Motors 2
+      HAL_Delay(500);
+      HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_11); // Motors 2
+      HAL_Delay(1000);
+    }
   }
   /* USER CODE END 3 */
 }
@@ -230,7 +309,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 96;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
+  htim2.Init.Period = 19999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -264,6 +343,96 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 9599;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 999;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 9699;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 99999;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
 
 }
 
@@ -429,7 +598,59 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+  // Retrieve the message from the FIFO buffer
+  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
+  {    
+    // =====================================================
+    // Direkte Kontrolle von Komponenten
+    // =====================================================
+    // Headlights
+    if (RxHeader.StdId == 0x240 && RxHeader.DLC == 1)
+    {
+      if (RxData[0] == 0x11) {
+      	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+      } else {
+      	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
+      }
+    }
+    
+    // Bonnet
+    if (RxHeader.StdId == 0x250 && RxHeader.DLC == 1)
+    {
+      if (RxData[0] == 0x11) {
+      	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 1200);
+      } else {
+      	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 800);
+      }
+    }
+  }
+}
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM5)
+  {
+    // Toggle wheels
+    if (wheels_running) {
+      HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_SET); // Motors 2
+      wheels_running = 1;
+    } else {
+      HAL_GPIO_WritePin(GPIOE, GPIO_PIN_11, GPIO_RESET); // Motors 2
+      wheels_running = 0;
+    }
+  }
+
+  if (htim->Instance == TIM4)
+  {
+    TxData[0] = wheels_running * 0xFF;
+    if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+    {
+        // Handle transmission error
+    }
+  }
+}
 /* USER CODE END 4 */
 
 /**
