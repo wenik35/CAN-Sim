@@ -72,6 +72,6 @@ You will need to find out the serial number of your boards and provide them to t
 
 ## Notes
 
-- `can-f407-makefile-slim` is the slimmer STM32F407 example for use in the remote lab. it functions mostly the same as the full `can-f407-makefile` project, all of the init function are in init.c
+- `can-f407-makefile-slim` is a slimmed down version for the remote lab, which 
 - The STM32F407 does not have a USB serial connection, so a separate TTL-to-USB module is needed
 - The terminal module is currently only configured to include the STM32F407 example, but it can be easily modified to include the STM32F413 example as well. Just change the `Dockerfile` in the `python-terminal` directory to include the `can-f413-makefile` project and rebuild the docker image.

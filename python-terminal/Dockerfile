@@ -34,7 +34,7 @@ COPY python-terminal/_assets/oh-my-zsh /home/appuser/.oh-my-zsh
 
 # Copy application files
 COPY python-terminal .
-COPY can-f407-makefile /home/appuser/code
+COPY can-f407-makefile-slim /home/appuser/code
 
 # ---> NEW: Fix permissions so appuser owns these directories <---
 USER root
