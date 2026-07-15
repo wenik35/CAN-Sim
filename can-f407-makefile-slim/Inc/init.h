@@ -16,6 +16,8 @@ extern I2S_HandleTypeDef hi2s3;
 
 extern SPI_HandleTypeDef hspi1;
 
+extern UART_HandleTypeDef huart2;
+
 
 extern CAN_TxHeaderTypeDef   TxHeader;
 extern CAN_RxHeaderTypeDef   RxHeader;
