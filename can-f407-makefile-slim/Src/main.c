@@ -9,7 +9,7 @@ int main(void)
     // Showcase Loop
     if (1)
     {
-              // ==========================================
+        // ==========================================
         // Section 1: Headlights
         // ==========================================
         TxHeader.StdId = 0x102;          // Set the ID
@@ -88,4 +88,13 @@ int main(void)
         HAL_Delay(1000);
        }
      }
+}
+
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+  // Retrieve the message from the FIFO buffer
+  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
+  {    
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+  }
 }
