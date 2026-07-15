@@ -4,6 +4,7 @@
 
 ## Repository structure
 
+- `cad-files` - Contains CAD files for the hardware setup used in the remote lab. The car model is a modified version of [Turtleman's Remastered Low Poly BMW 2002 Turbo](https://www.printables.com/model/342150-remastered-low-poly-bmw-2002-turbo), which is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
 - `can-f407-makefile/` - Full STM32F407 makefile project with HAL drivers and USB host support.
 - `can-f407-makefile-slim/` - Slimmed-down STM32F407 makefile project with CAN and USB host support.
 - `can-f413-makefile/` - Full STM32F413 makefile project with HAL drivers.
@@ -67,8 +68,10 @@ cd can-f407-makefile-slim
 make flash
 ```
 
-You will need to find 
+You will need to find out the serial number of your boards and provide them to the `flash` target at the bottom of the Makefile. Just connect the board the board to your computer and run `lsusb -v -d 0483:374b | grep iSerial` to find it.
 
 ## Notes
 
 - `can-f407-makefile-slim` is the slimmer STM32F407 example for use in the remote lab. it functions mostly the same as the full `can-f407-makefile` project, all of the init function are in init.c
+- The STM32F407 does not have a USB serial connection, so a separate TTL-to-USB module is needed
+- The terminal module is currently only configured to include the STM32F407 example, but it can be easily modified to include the STM32F413 example as well. Just change the `Dockerfile` in the `python-terminal` directory to include the `can-f413-makefile` project and rebuild the docker image.
